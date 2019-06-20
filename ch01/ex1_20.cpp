@@ -1,11 +1,12 @@
 #include <iostream>
 #include "include/Sales_item.h"
 
+using std::cin;
+using std::cout;
+using std::endl;
+
 int main()
 {
-  Sales_item item;
-  while (std::cin >> item)
-    std::cout << item << std::endl;
-
-  return 0;
+    for (Sales_item item; cin >> item; cout << item << endl);
+    return 0;
 }

@@ -1,11 +1,11 @@
 #ifndef _ORQUERY_H
 #define _ORQUERY_H
 
-#include<memory>
+#include <memory>
 using std::shared_ptr;
 
-#include"query.h"
-#include"binaryquery.h"
+#include "query.h"
+#include "binaryquery.h"
 
 class QueryResult;
 class TextQuery;
@@ -13,7 +13,7 @@ class TextQuery;
 class OrQuery :public BinaryQuery
 {
 	friend Query operator|(const Query&, const Query&);
-	OrQuery(const Query &left, const Query &right) :BinaryQuery(left, right, "|"){}
+	OrQuery(const Query &left, const Query &right) :BinaryQuery(left, right, "|"){ }
 	QueryResult eval(const TextQuery&) const;
 };
 

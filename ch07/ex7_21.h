@@ -3,7 +3,6 @@
 //  Exercise 7.21
 //
 //  Created by pezy on 11/13/14.
-//  Copyright (c) 2014 pezy. All rights reserved.
 //
 
 #ifndef CP5_ex7_21_h
@@ -19,9 +18,9 @@ class Sales_data {
 
 public:
     Sales_data() = default;
-    Sales_data(const std::string &s):bookNo(s) {}
-    Sales_data(const std::string &s, unsigned n, double p):bookNo(s),units_sold(n),revenue(n*p){}
-    Sales_data(std::istream &is) { read(is, *this);}
+    Sales_data(const std::string &s):bookNo(s) { }
+    Sales_data(const std::string &s, unsigned n, double p):bookNo(s), units_sold(n), revenue(n*p){ }
+    Sales_data(std::istream &is) { read(is, *this); }
 
     std::string isbn() const { return bookNo; };
     Sales_data& combine(const Sales_data&);

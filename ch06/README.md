@@ -1,86 +1,95 @@
-##Exercise 6.1
+## Exercise 6.1
 
 **Parameters**: Local variable declared inside the function parameter list.
 they are initialized by the **arguments** provided in the each function call.
 
 **Arguments**: Values supplied in a function call that are used to initialize the function's **parameters**.
 
-##Exercise 6.2
-
+## Exercise 6.2
 ```cpp
-(a) string f() {
+(a) string f() {  // return should be string, not int
           string s;
           // ...
           return s;
     }
-(b) void f2(int i) { /* ... */ }
-(c) int calc(int v1, int v2) { /* ... */ }
-(d) double square (double x) { return x * x; }
+(b) void f2(int i) { /* ... */ }  // function needs return type
+(c) int calc(int v1, int v2) { /* ... */ }  // parameter list cannot use same name twice
+(d) double square (double x) { return x * x; }  // function body needs braces
 ```
 
-##Exercise 6.3
+## Exercise 6.3
 
 ```cpp
 #include <iostream>
 
-int fact(int val)
+int fact(int i)
 {
-    if (val == 0 || val == 1) return 1;
-    else return val * fact(val-1);
+    if(i<0)
+    {
+        runtime_error err("Input cannot be a negative number");
+        cout << err.what() << endl;
+    }
+    return i > 1 ? i * fact( i - 1 ) : 1;
 }
 
 int main()
 {
-    int j = fact(5);  // j equals 120, i.e., the result of fact(5)
-    std::cout << "5! is " << j << std::endl;
+    std::cout << std::boolalpha << (120 == fact(5)) << std::endl;
     return 0;
 }
 ```
 
-##Exercise 6.4
+## Exercise 6.4
 
 ```cpp
 #include <iostream>
 #include <string>
-using std::string;
-using std::cin;
-using std::cout;
-using std::endl;
 
-void factorial(){
-
-    int num=0;
-    unsigned result=1;
-    cout<<"Please input a positive number: "<<endl;
-    cin>>num;
-    cout<<num;
-    if (num>=0&&num<=12){
-        while (num>=1)
-            result*=num--;
-
-        cout<<"! is "<<result<<endl;}
-    else
-        cout<<" is out of range."<<endl;
+int fact(int i)
+{
+    return i > 1 ? i * fact(i - 1) : 1;
 }
 
-int main () {
-    factorial();
+void interactive_fact()
+{
+    std::string const prompt = "Enter a number within [1, 13) :\n";
+    std::string const out_of_range = "Out of range, please try again.\n";
+    for (int i; std::cout << prompt, std::cin >> i; )
+    {
+        if (i < 1 || i > 12)
+        {
+            std::cout << out_of_range; 
+            continue;
+        }
+        std::cout << fact(i) << std::endl;
+    }
+}
+
+int main()
+{
+    interactive_fact();
     return 0;
 }
-
 ```
 
-##Exercise 6.5
+## Exercise 6.5
 
 ```cpp
-template <typename T>
-T abs(T i)
+#include <iostream>
+
+int abs(int i)
 {
-    return i >= 0 ? i : -i;
+    return i > 0 ? i : -i;
+}
+
+int main()
+{
+    std::cout << abs(-5) << std::endl;
+    return 0;
 }
 ```
 
-##Exercise 6.6
+## Exercise 6.6
 
 
 **local variable**: Variables defined inside a **block**;
@@ -150,40 +159,40 @@ void print(std::vector<int>::iterator begin, std::vector<int>::iterator end)
 
 >why is `s` a reference to const but `occurs` is a plain reference?
 
-cause the `s` should not be changed by this function. but `occurs`'s result must be calculated by the function.
+Because `s` should not be changed by this function, but `occurs` result must be calculated by the function.
 
 >Why are these parameters references, but the char parameter `c` is not?
 
-casue `c` maybe a temp varable. such as `find_char(s, 'a', occurs)`
+Because `c` may be a temp varable, such as `find_char(s, 'a', occurs)`
 
 >What would happen if we made `s` a plain reference? What if we made `occurs` a reference to const?
 
-`s` could be changed in the function, and `occurs` whould not be changed. so `occurs = 0;` is an error.
+`s` could be changed in the function, and `occurs` would not be changed. so `occurs = 0;` is an error.
 
 ## Exercise 6.16
 ```cpp
 bool is_empty(const string& s) { return s.empty(); }
 ```
 
-Since this function doesn't change the argument,"const" shoud be added
-before string&s,otherwise this function is misleading and can't be used
+Since this function doesn't change the argument, "const" shoud be added
+before string&s, otherwise this function is misleading and can't be used
 with const string or in a const function.
 
 ## [Exercise 6.17](ex6_17.cpp)
 
 Not the same.
 For the first one "const" was used, since no change need to do for the argument.
-For the second function,"const" can't be used,because the content of the agument
+For the second function, "const" can't be used, because the content of the agument
 should be changed.
 
 ## Exercise 6.18
 (a)
 ```cpp
-bool compare(matrix &m1, matrix &m2){ /.../ }
+bool compare(matrix &m1, matrix &m2);
 ```
 (b)
 ```cpp
-vector<int>::iterator change_val(int, vector<int>::iterator) { /.../ }
+vector<int>::iterator change_val(int, vector<int>::iterator);
 ```
 
 ## Exercise 6.19
@@ -226,7 +235,7 @@ The type of `elem` in the `for` loop is `const std::string&`.
 
 ## Exercise 6.29
 
-We should use `const reference` as the loop control variable. because the elements in an `initializer_list` are always const values, so we cannot change the value of an element in an `initializer_list`.
+Depends on the type of elements of `initializer_list`. When the type is [PODType](http://en.cppreference.com/w/cpp/concept/PODType), reference is unnecessary. Because `POD` is **cheap to copy**(such as `int`). Otherwise, Using reference(`const`) is the better choice.
 
 ## Exercise 6.30
 
@@ -237,18 +246,18 @@ Error (Clang):
 
 ## Exercise 6.31
 
-when you can find the preexited object that the reference refered.
+when you can find the preexisting object that the reference refered.
 
 ## Exercise 6.32
 
 legal, it gave the values (0 ~ 9) to array `ia`.
 
-##[Exercise 6.33](ex6_33.cpp)([Generics Version](ex6_33_generics_version.cpp))
+## [Exercise 6.33](ex6_33.cpp)
 ## Exercise 6.34
 
 When the recursion termination condition becomes `var != 0`, two situations can happen :
-case 1 : If the argument is positive, recursion stops at 0. This is exactly what @shbling pointed out.
-case 2 : if the argument is negative, recursion would never stop. As a result,a stack overflow would occur.
+* case 1 : If the argument is positive, recursion stops at 0.(Note : There is one extra multiplication step though as the combined expression for factorial(5) reads 5 * 4 * 3 * 2 * 1 * 1. In terms of programming languages learning, such subtle difference probably looks quite trivial. In algorithms analysis and proof, however, this extra step may be super important.)
+* case 2 : if the argument is negative, recursion would never stop. As a result, a stack overflow would occur.
 
 ## Exercise 6.35
 
@@ -284,11 +293,11 @@ decltype(arrStr)& arrPtr(int i)
 
 ## Exercise 6.39
 
-(a) illegal
+(a) legal, repeated declarations(without definition) are legal in C++
 
-(b) illegal
+(b) illegal, only the return type is different
 
-(c) legal
+(c) legal, the parameter type is different and return type is changed
 
 ## Exercise 6.40
 
@@ -312,24 +321,26 @@ Both two should put in a header. (a) is an inline function. (b) is the declarati
 ## [Exercise 6.44](ex6_44.cpp)
 ## Exercise 6.45
 
-For example, the function `arrPtr` in [Exercise 6.38](#exercise-638) and `make_plural` in [Exercise 6.42](#exercise-642) should be defined as `inline`. But the function `func` in [Exercise 6.4](#exercise-64) shouldn't. Cause it just being call once and too many codes in the function.
+For example, the function `arrPtr` in [Exercise 6.38](# Exercise-638) and `make_plural` in [Exercise 6.42](# Exercise-642) should be defined as `inline`. But the function `func` in [Exercise 6.4](# Exercise-64) shouldn't. It is not that small and it's only being called once. Hence, it will probably not expand as inline.
 
 ## Exercise 6.46
+> Would it be possible to define `isShorter` as a `constexpr`? If so, do so. If not, explain why not.
 
-Yes.
-```cpp
-constexpr bool isShorter(const string& str1, const string& str2)
-{
-    return str1.size() < str2.size();
-}
-```
-If you want know more about `constexpr function `, maybe [it](http://stackoverflow.com/questions/28880538/i-am-confused-about-a-constexpr-function) is useful to you.
+No.
+
+Because `std::string::size()` is not a `constexpr` function and `s1.size() == s2.size()` is not a constant expression.
+
+> **For a** non-template, non-defaulted **constexpr function** or a non-template, non-defaulted, non-inheriting
+constexpr constructor, **if no argument values exist such that an invocation of the function or constructor
+could be an evaluated subexpression of a core constant expression (5.19), the program is ill-formed;** no
+diagnostic required. (N3690 §7.1.5 [dcl.constexpr]/5)
+
 ## [Exercise 6.47](ex6_47.cpp)
 ## Exercise 6.48
 
 This loop let user input a word all the way until the word is sought.
 
-It isn't a good use of assert. because if user begin to input a word, the `cin` would be always have content. so the `assert` would be always `true`. It is meaningless. using `assert(s == sought)` is more better.
+It isn't a good use of assert. because if user begin to input a word, the `cin` would be always have content. so the `assert` would be always `true`. It is meaningless. using `assert(s == sought)` is better.
 
 ## Exercise 6.49
 
@@ -369,7 +380,7 @@ int calc(const int&, const int&); // calls lookup(const int&)
 (b)
 ```cpp
 int calc(char*, char*); // calls lookup(char*)
-int calc(const char*, const char*); calls lookup(const char *)
+int calc(const char*, const char*); // calls lookup(const char *)
 ```
 (c)
 
@@ -404,7 +415,7 @@ int divide(int a, int b) { return b != 0 ? a / b : 0; }
 
 ## Exercise 6.56
 ```cpp
-std::vector<decltype(func) *> vec{add, subtract, multiply, divide};
+std::vector<decltype(func) *> vec{ add, subtract, multiply, divide };
 for (auto f : vec)
           std::cout << f(2, 2) << std::endl;
 ```

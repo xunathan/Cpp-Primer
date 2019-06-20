@@ -1,8 +1,8 @@
-//! @Alan
-//!
-//! Exercise 11.8:
-//! Write a program that stores the excluded words in a vector
-//! instead of in a set. What are the advantages to using a set?
+// @Yue Wang Sep, 2015
+//
+// Exercise 11.8:
+// Write a program that stores the excluded words in a vector
+// instead of in a set. What are the advantages to using a set?
 //  copied from the post on stack overflow:
 //  1.No matter what elements you add or remove (unless you add
 //  a duplicate, which is not allowed in a set), it will always
@@ -17,33 +17,25 @@
 //  to the number of items already in the vector. The time it takes
 //  to insert an item into a set is proportional to the log of the
 //  number of items. If the number of items is large, that's a huge
-//  difference. Log(100,000) is 5; that's a major speed improvement.
+//  difference. Log(100, 000) is 17; that's a major speed improvement.
 //  The same goes for removal.
+//
 //  http://stackoverflow.com/questions/8686725/what-is-the-difference-between-stdset-and-stdvector
-//!
+//
 #include <iostream>
-#include <map>
 #include <string>
+#include <vector>
 #include <algorithm>
-
-
 
 int main()
 {
-    std::vector<std::string> exclude = {"aa","bb","cc"};
-    std::string word;
-    while([&]()
+    std::vector<std::string> exclude = { "aa", "bb", "cc", "dd", "ee", "ff" };
+    for (std::string word; std::cout << "Enter plz:\n", std::cin >> word; )
     {
-          std::cout << "enter:\n";
-          std::cin >> word;
-          return word != "@q";
-    }())
-    {
-        for(const auto &e : exclude)
-            if (e == word)  std::cout << "excluded!";
+        auto is_excluded = std::binary_search(exclude.cbegin(), exclude.cend(), word);
+        auto reply = is_excluded ? "excluded" : "not excluded";
+        std::cout << reply << std::endl;
     }
 
     return 0;
 }
-
-

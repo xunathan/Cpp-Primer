@@ -2,18 +2,15 @@
 
 #include <iostream>
 
-int main()
+auto sum(int lo, int hi)
 {
-	int sum = 0, val = 50;
-	while (val <= 100)
-	{
-		sum += val;
-		++val;
-	}
-	
-	std::cout << "the sum is: " << sum << std::endl;
-	
-	return 0;
+    int sum = 0;
+    while (lo <= hi) sum += lo++;
+    return sum;
 }
 
-// output: the sum is: 3825
+int main()
+{
+    std::cout << "Sum of 50 to 100 inclusive is: " << sum(50, 100) << std::endl;
+    return 0;
+}

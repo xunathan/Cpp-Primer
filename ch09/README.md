@@ -7,7 +7,7 @@
 >- (b) Read an unknown number of words. Always insert new words at the back. Remove the next value from the front.
 >- (c) Read an unknown number of integers from a file. Sort the numbers and then print them to standard output.
 
-- (a) `std::set` is the best. now, we can select `vector` or `deque`, better than `list`, cause we don't need insert or delete elements in the middle.
+- (a) Within the three options, `std::list` is the best one. To keep sorted alphabetically, each inserting into vector takes theta(n) time complexity, whereas that of list (essentially doubly linked list) takes only O(n). Hence theoretically list has better performance.  
 - (b) `deque`. If the program needs to insert or delete elements at the front and the back, but not in the middle, use a deque
 - (c) `vector`, no need that insert or delete at the front or back. and If your program has lots of small elements and space overhead matters, don’t use list or forward_list.
 
@@ -15,7 +15,7 @@
 >Define a list that holds elements that are deques that hold ints.
 
 ```cpp
-std::list<std::deque<int>> ldi;
+std::list<std::deque<int>> a_list_of_deque_of_ints;
 ```
 
 ## Exercise 9.3:
@@ -29,10 +29,10 @@ two iterators, `begin` and `end`:
 >Write a function that takes a pair of iterators to a vector<int> and an int value. Look for that value in the range and return a bool indicating whether it was found.
 
 ```cpp
-bool find(vector<int>::iterator beg, vector<int>::iterator end, int value)
+auto contains(vector<int>::const_iterator first, vector<int>::const_iterator last, int value)
 {
-    for (auto iter = beg; iter != end; ++iter)
-        if (*iter == value) return true;
+    for(; first != last; ++first)
+        if(*first == value) return true;
     return false;
 }
 ```
@@ -41,11 +41,11 @@ bool find(vector<int>::iterator beg, vector<int>::iterator end, int value)
 >Rewrite the previous program to return an iterator to the requested element. Note that the program must handle the case where the element is not found.
 
 ```cpp
-vector<int>::iterator find(vector<int>::iterator beg, vector<int>::iterator end, int value)
+auto find(vector<int>::const_iterator first, vector<int>::const_iterator last, int value)
 {
-    for (auto iter = beg; iter != end; ++iter)
-        if (*iter == value) return iter;
-    return end;
+    for(; first != last; ++first)
+        if(*first == value) return first;
+    return last;
 }
 ```
 
@@ -55,7 +55,7 @@ vector<int>::iterator find(vector<int>::iterator beg, vector<int>::iterator end,
 ```cpp
 list<int> lst1;
 list<int>::iterator iter1 = lst1.begin(), iter2 = lst1.end();
-while (iter1 < iter2) /*ERROR: operator< can't be applied to iterator for list*/
+while (iter1 < iter2)
 ```
 
 Fixed:
@@ -63,7 +63,7 @@ Fixed:
 while(iter1 != iter2)
 ```
 #### note:
-operator `<` can be used in `list`,but can't be applied to iterator for `list`.
+operator `<` is not implemented in `std::list`, because `std::list` is essetially a doubly linked list. Addresses of nodes of linked list are not necessarily continuous.  
 ## Exercise 9.7:
 >What type should be used as the index into a vector of ints?
 
@@ -72,8 +72,8 @@ operator `<` can be used in `list`,but can't be applied to iterator for `list`.
 ## Exercise 9.8:
 >What type should be used to read elements in a list of strings? To write them?
 
-    list<string>::iterator || list<string>::const_iterator // read
-    list<string>::iterator // write
+    list<string>::const_iterator // to read
+    list<string>::iterator // to write
 
 ## Exercise 9.9:
 >What is the difference between the `begin` and `cbegin` functions?
@@ -108,16 +108,16 @@ auto it2 = v2.begin(), it3 = v1.cbegin(), it4 = v2.cbegin();
 
 `it1` is `vector<int>::iterator`
 
-`it2`,`it3` and `it4` are `vector<int>::const_iterator`
+`it2`, `it3` and `it4` are `vector<int>::const_iterator`
 
 ## Exercise 9.11:
 >Show an example of each of the six ways to create and initialize a vector. Explain what values each vector contains.
 
 ```cpp
-vector<int> vec;    // 0
+vector<int> vec;    // vec is empty
 vector<int> vec(10);    // 0
-vector<int> vec(10,1);  // 1
-vector<int> vec{1,2,3,4,5}; // 1,2,3,4,5
+vector<int> vec(10, 1);  // 1
+vector<int> vec{ 1, 2, 3, 4, 5 }; // 1, 2, 3, 4, 5
 vector<int> vec(other_vec); // same as other_vec
 vector<int> vec(other_vec.begin(), other_vec.end()); // same as other_vec
 ```
@@ -125,16 +125,23 @@ vector<int> vec(other_vec.begin(), other_vec.end()); // same as other_vec
 ## Exercise 9.12:
 >Explain the differences between the constructor that takes a container to copy and the constructor that takes two iterators.
 
-- Constructor that takes two iterators copies the items between `[first, last)`,e.g.
+- The constructor that takes another container as an argument (excepting array) assumes the container type and element type of both containers are identical. It will also copy all the elements of the received container into the new one:
 ```cpp
-auto data = { 1, 2, 3 };
-std::vector<int> vec(data.begin(), data.begin()+1); // vec is {1}
+list<int> numbers = { 1, 2, 3, 4, 5 };
+list<int> numbers2(numbers);        // ok, numbers2 has the same elements as numbers
+vector<int> numbers3(numbers);      // error: no matching function for call...
+list<double> numbers4(numbers);     // error: no matching function for call...
 ```
-- Constructor that takes another container copies all items from it. e.g.
+- The constructor that takes two iterators as arguments does not require the container types to be identical. Moreover, the element types in the new and original containers can differ as long as it is possible to convert the elements we’re copying to the element type of the container we are initializing.
+It will also copy only the object delimited by the received iterators.
 ```cpp
-auto data = { 1, 2, 3 };
-std::vector<int> vec(data); //vec is {1,2,3}
+list<int> numbers = { 1, 2, 3, 4, 5 };
+list<int> numbers2(numbers.begin(), numbers.end);        // ok, numbers2 has the same elements as numbers
+vector<int> numbers3(numbers.begin(), --numbers.end());  // ok, numbers3 is { 1, 2, 3, 4 }
+list<double> numbers4(++numbers.beg(), --numbers.end());        // ok, numbers4 is { 2, 3, 4 }
+forward_list<float> numbers5(numbers.begin(), numbers.end());   // ok, number5 is { 1, 2, 3, 4, 5 }
 ```
+
 
 ## [Exercise 9.13](ex9_13.cpp)
 ## [Exercise 9.14](ex9_14.cpp)
@@ -145,7 +152,7 @@ std::vector<int> vec(data); //vec is {1,2,3}
 >Assuming c1 and c2 are containers, what (if any) constraints does the following usage place on the types of c1 and c2?
 
 First, there must be the identical container and same type holded.
-Second,the type held must support relational operation. (@Mooophy)
+Second, the type held must support relational operation. (@Mooophy)
 
 Both c1 and c2 are the containers except the unordered associative containers.(@pezy)
 
@@ -179,15 +186,25 @@ while (iter != mid)
 // cause the reallocation will lead the iterators and references
 // after the insertion point to invalid. Thus, we need to call reserver at first.
 
-vector<int> iv = {0,1,2,3,4,5,6,7,8,9}; // For example.
-iv.reserver(25); // make sure that enough
+#include <iostream>
+#include <vector>
 
-vector<int>::iterator iter = iv.begin(), mid = iv.begin() + iv.size()/2;
-while (iter != mid)
-    if (*mid == some_val)
-        mid = iv.insert(mid, 2 * some_val);
-    else
-        --mid;
+void double_and_insert(std::vector<int>& v, int some_val)
+{
+    auto mid = [&]{ return v.begin() + v.size() / 2; };
+    for (auto curr = v.begin(); curr != mid(); ++curr)
+        if (*curr == some_val)
+            ++(curr = v.insert(curr, 2 * some_val));
+}
+
+int main()
+{
+    std::vector<int> v{ 1, 9, 1, 9, 9, 9, 1, 1 };
+    double_and_insert(v, 1);
+
+    for (auto i : v) 
+        std::cout << i << std::endl;
+}
 ```
 
 The complete test codes, check [this](ex9_22.cpp).
@@ -217,16 +234,18 @@ if both elem1 and elem2 are the off-the-end iterator, nothing happened too.
 >Write a function that takes a forward_list<string> and two additional string arguments. The function should find the first string and insert the second immediately following the first. If the first string is not found, then insert the second string at the end of the list.
 
 ```cpp
-void insert(forward_list<string> &flst, string find, string insrt)
+void find_and_insert(forward_list<string> &list, string const& to_find, string const& to_add)
 {
-    auto prev = flst.before_begin();
-    for (auto curr = flst.begin(); curr != flst.end(); prev = curr++)
-        if (*curr == find)
+    auto prev = list.before_begin();
+    for (auto curr = list.begin(); curr != list.end(); prev = curr++)
+    {
+        if (*curr == to_find)
         {
-            flst.insert_after(curr, insrt);
+            list.insert_after(curr, to_add);
             return;
         }
-    flst.insert_after(prev, insrt);
+    }
+    list.insert_after(prev, to_add);
 }
 ```
 
@@ -266,7 +285,7 @@ cannot.
 ## Exercise 9.37:
 >Why don’t list or array have a capacity member?
 
-`list` elements does not store contiguously. `array` has the fixed size, thus cannot added elements to it.
+`list` does not hold elements contiguously. `array` has the fixed size statically.
 
 ## [Exercise 9.38](ex9_38.cpp)
 
@@ -274,15 +293,19 @@ cannot.
 >Explain what the following program fragment does:
 ```cpp
 vector<string> svec;
-svec.reserve(1024);     // sets capacity to at least 1024
+svec.reserve(1024);
 string word;
-while (cin >> word)     // input word continually
+while (cin >> word)
     svec.push_back(word);
-svec.resize(svec.size()+svec.size()/2); // sets capacity to at least 3/2's size. may do nothing.
+svec.resize(svec.size()+svec.size()/2);
 ```
 
+The `while` loop will read words from `cin` and store them in out vector. Even if we initially reserved 1024 elements, if there are more words read from `cin`, our vector's capacity will be automatically increased (most implementations will double the previous capacity) to accommodate them.
+
+And now comes the catch. `resize()` is different from `reserve()`. In this case `resize()` will add another `svec.size()/2` value initialized elements to `svec`. If this exceeds `svec.capacity()` it will also automatically increase it to accommodate the new elements.
+
 ## Exercise 9.40:
->If the program in the previous exercise reads 256 words, what is its likely capacity after it is resized? What if it reads 512? 1,000? 1,048?
+>If the program in the previous exercise reads 256 words, what is its likely capacity after it is resized? What if it reads 512? 1, 000? 1, 048?
 
 read | size | capacity
 ------ | ------ | ------
@@ -298,9 +321,7 @@ read | size | capacity
 
 Use member `reserve(120)` to allocate enough space for this string. (@Mooophy)
 
-## Exercise 9.43
-
-[Visual Studio + Clang](ex9_43_1.cpp) | [cross_platform](ex9_43_2.cpp)
+## [Exercise 9.43](ex9_43.cpp)
 
 ## [Exercise 9.44](ex9_44.cpp)
 ## [Exercise 9.45](ex9_45.cpp)

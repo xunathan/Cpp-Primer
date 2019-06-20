@@ -1,11 +1,9 @@
-//! @Alan @pezy
-//!
-//! Exercise 9.14:
-//! Write a program to assign the elements from a list of char* pointers
-//! to C-style character strings
-//!
-//! @Notice C-style character strings should use const char*, otherwise warning.
-//!
+// @Yue Wang @pezy
+//
+// Exercise 9.14:
+// Write a program to assign the elements from a list of char* pointers
+// to C-style character strings
+//
 
 #include <iostream>
 #include <string>
@@ -14,12 +12,11 @@
 
 int main()
 {
-    std::list<const char*> l{"Mooophy", "pezy", "Queeuqueg"};
+    std::list<const char*> l{ "Mooophy", "pezy", "Queeuqueg" };
     std::vector<std::string> v;
     v.assign(l.cbegin(), l.cend());
-
-    for (const auto &ch : v)
-        std::cout << ch << std::endl;
+    for (auto ptr : v)
+        std::cout << ptr << std::endl;
 
     return 0;
 }

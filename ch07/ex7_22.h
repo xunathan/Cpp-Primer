@@ -3,7 +3,6 @@
 //  Exercise 7.22
 //
 //  Created by pezy on 11/13/14.
-//  Copyright (c) 2014 pezy. All rights reserved.
 //
 
 #ifndef CP5_ex7_22_h
@@ -12,14 +11,14 @@
 #include <string>
 #include <iostream>
 
-struct Person {
+class Person {
     friend std::istream &read(std::istream &is, Person &person);
     friend std::ostream &print(std::ostream &os, const Person &person);
 
 public:
     Person() = default;
-    Person(const std::string sname, const std::string saddr):name(sname), address(saddr){}
-    Person(std::istream &is){read(is, *this);}
+    Person(const std::string sname, const std::string saddr):name(sname), address(saddr){ }
+    Person(std::istream &is){ read(is, *this); }
 
     std::string getName() const { return name; }
     std::string getAddress() const { return address; }

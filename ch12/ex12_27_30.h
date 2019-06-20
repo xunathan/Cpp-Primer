@@ -3,7 +3,6 @@
 //  Exercise 12.27
 //
 //  Created by pezy on 12/31/14.
-//  Copyright (c) 2014 pezy. All rights reserved.
 //
 //  The TextQuery and QueryResult classes use only capabilities that we have already covered. 
 //  Without looking ahead, write your own versions of these classes.
@@ -40,7 +39,7 @@ class QueryResult {
 public:
     friend std::ostream& print(std::ostream &, const QueryResult&);
 public:
-    QueryResult(const string &s, shared_ptr<std::set<TextQuery::LineNo>> set, shared_ptr<vector<string>> v) : word(s), nos(set), input(v) {}
+    QueryResult(const string &s, shared_ptr<std::set<TextQuery::LineNo>> set, shared_ptr<vector<string>> v) : word(s), nos(set), input(v) { }
 private:
     string word;
     shared_ptr<std::set<TextQuery::LineNo>> nos;

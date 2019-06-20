@@ -3,7 +3,6 @@
 //  Exercise 7.13
 //
 //  Created by pezy on 11/9/14.
-//  Copyright (c) 2014 pezy. All rights reserved.
 //
 
 #include "ex7_12.h"
@@ -16,6 +15,7 @@ int main()
         std::istream &is = std::cin;
         while (is) {
             Sales_data trans(is);
+            if (!is) break;
             if (total.isbn() == trans.isbn())
                 total.combine(trans);
             else {
@@ -23,6 +23,7 @@ int main()
                 total = trans;
             }
         }
+        print(std::cout, total) << std::endl;
     }
     else
     {

@@ -31,7 +31,7 @@ long count() {
 }
 
 // test codes in main()
-StrBlob str({"hello", "world"});
+StrBlob str({ "hello", "world" });
 std::cout << "before: " << str.count() << std::endl; // 1
 StrBlob str_cp(str);
 std::cout << "after: " << str.count() << std::endl;  // 2
@@ -64,7 +64,7 @@ Point foo_bar(Point arg) // 1
 ## Exercise 13.6:
 >What is a copy-assignment operator? When is this operator used? What does the synthesized copy-assignment operator do? When is it synthesized?
 
-The copy-assignment operator is function named `operator=`.
+The copy-assignment operator is function named `operator=` and takes an argument of the same type as the class.
 
 This operator is used when assignment occurred.
 
@@ -112,7 +112,7 @@ bool fcn(const Sales_data *trans, Sales_data accum)
 ## [Exercise 13.13](ex13_13.cpp)
 
 ## Exercise 13.14:
->Assume that `numbered` is a class with a default constructor that generates a unique serial number for each object, which is stored in a data member named `mysn`. Assuming numbered uses the synthesized copy- control members and given the following function:
+>Assume that `numbered` is a class with a default constructor that generates a unique serial number for each object, which is stored in a data member named `mysn`. Assuming numbered uses the synthesized copy-control members and given the following function:
 ```cpp
 void f (numbered s) { cout << s.mysn << endl; }
 ```
@@ -127,12 +127,12 @@ Three identical numbers.
 ## Exercise 13.15:
 >Assume `numbered` has a copy constructor that generates a new serial number. Does that change the output of the calls in the previous exercise? If so, why? What output gets generated?
 
-Yes, the output will change. cause we don't use the synthesized copy-control members rather than own defined.The output will be three different numbers.
+Yes, it does. Because, as described, the newly defined copy constructor can handle such situations as expected.Thus, the output will be three different numbers.
 
 ## Exercise 13.16:
 >What if the parameter in f were const numbered&? Does that change the output? If so, why? What output gets generated?
 
-Yes, the output will change. cause the function `f` haven't any copy operators. Thus, the output are the same when pass the each object to `f`.
+Yes, the output will change. Because no copy operation happens within function `f`. Thus, the three Output are the same.
 
 ## Exercise 13.17
 > Write versions of numbered and f corresponding to the previous three exercises and check whether you correctly predicted the output.
@@ -151,18 +151,7 @@ The member (smart pointer and container) will be copied.
 ## Exercise 13.21:
 >Do you think the TextQuery and QueryResult classes need to define their own versions of the copy-control members? If so, why? If not, why not? Implement whichever copy-control operations you think these classes require.
 
-(@Mooophy)
-No copy-control members needed.
-
-Because, all these classes are using smart pointers to manage dynamic memory which can be freed automatically by calling synthesized destructors. The objects of these classes should share the same dynamic memory.Hence no user-defined version needed as well.
-
-```cpp
-TextQuery(const TextQuery&) = delete;
-TextQuery& operator=(const TextQuery) = delete;
-
-QueryResult(const QueryResult&) = delete;
-QueryResult& operator=(const QueryResult) = delete;
-```
+As synthesized version meet all requirements for this case, no custom version control memebers need to define. Check [#304](https://github.com/Mooophy/Cpp-Primer/issues/304#issuecomment-124081395) for detail.
 
 ## [Exercise 13.22](ex13_22.h)
 
@@ -174,7 +163,7 @@ Check 13.22.
 ## Exercise 13.24:
 >What would happen if the version of `HasPtr` in this section didn’t define a destructor? What if `HasPtr` didn’t define the copy constructor?
 
-If `HasPtr` didn't define a destructor, memory leak will happened. If `HasPtr` didn't define the copy constructor, when assignment happened, just points copied, the string witch `ps` points haven't been copied.
+If `HasPtr` didn't define a destructor, a memory leak would occur, compiler synthesized destructor does not manage dynamic memory. If `HasPtr` didn't define the copy constructor, we would get pointer-like copy behaviour. The ps pointer would be copied to the left hand side, but ps in the lhs and the rhs would still point to the same string on the heap. 
 
 ## Exercise 13.25:
 >Assume we want to define a version of `StrBlob` that acts like a value. Also assume that we want to continue to use a shared_ptr so that our `StrBlobPtr` class can still use a weak_ptr to the vector. Your revised class will need a copy constructor and copy-assignment operator but will not need a destructor. Explain what the copy constructor and copy-assignment operators must do. Explain why the class does not need a destructor.
@@ -223,7 +212,7 @@ some existing `Folders` will out of sync with the `Message` after assignment.
 >We did not use copy and swap to define the Message assignment operator. Why do you suppose this is so?
 
 @Mooophy
-The copy and swap is an elegant way when working with dynamicly allocated memory. In the Message class ,noing is allocated dynamically. Thus using this idiom makes no sense and will make it more complicated to implement due to the pointers that point back.
+The copy and swap is an elegant way when working with dynamicly allocated memory. In the Message class , nothing is allocated dynamically. Thus using this idiom makes no sense and will make it more complicated to implement due to the pointers that point back.
 
 @pezy
 In this case, `swap` function is special. It will be clear two `Message`'s folders , then swap members, and added themselves to each folders. But, `Message` assignment operator just clear itself, and copy the members, and added itself to each folders. The `rhs` don't need to clear and add to folders. So, if using copy and swap to define, it will be very inefficiency.
@@ -335,16 +324,8 @@ String s5 = baz(); // second avoided
 ## Exercise 13.51:
 >Although `unique_ptrs` cannot be copied, in 12.1.5 (p. 471) we wrote a clone function that returned a unique_ptr by value. Explain why that function is legal and how it works.
 
-In the second assignment, we assign from the result of a call to getVec. That expression is an rvalue. In this case, both assignment operators are viable—we can bind the result of getVec to either operator’s parameter. Calling the copy-assignment operator requires a conversion to const, whereas StrVec&& is an exact match. Hence, the second assignment uses the move-assignment operator.
-
-```cpp
-unique_ptr<int> clone(int p) {
-    // ok: explicitly create a unique_ptr<int> from int*
-    return unique_ptr<int>(new int(p));
-}
-```
-
-the result of a call to `clone` is an **rvalue**, so it uses the move-assignment operator rather than copy-assignment operator. Thus, it is legal and can pretty work.
+For such case, move semantics is expected rather than copy operation.That's why a `unique_ptr` may be returned from a function by value.
+Reference: [StackOverflow - returning unique pointers from functions] (http://stackoverflow.com/questions/4316727) <br>
 
 ## Exercise 13.52:
 >Explain in detail what happens in the assignments of the `HasPtr` objects on page 541. In particular, describe step by step what happens to values of `hp`, `hp2`, and of the `rhs` parameter in the `HasPtr` assignment operator.
@@ -360,7 +341,7 @@ Thus, in `hp = hp2;`, `hp2` is an lvalue, copy constructor used to copy `hp2`. I
 
 nothing to say, just see the versus codes:
 
-[hpp](ex13_53.h) | [cpp](ex13_53.cpp) | [Test](ex13_53_TEST.cpp)
+[hpp](ex13_53.h) | [cpp](ex13_53.cpp) | [Test](ex13_53_test.cpp)
 
 see more information at [this question && answer](http://stackoverflow.com/questions/21010371/why-is-it-not-efficient-to-use-a-single-assignment-operator-handling-both-copy-a).
 
@@ -368,7 +349,7 @@ see more information at [this question && answer](http://stackoverflow.com/quest
 >What would happen if we defined a `HasPtr` move-assignment operator but did not change the copy-and-swap operator? Write code to test your answer.
 
 ```sh
-error: ambiguous overload for 'operator=' (operand types are 'HasPtr' and 'std::remove_reference<HasPtr&>::type {aka HasPtr}')
+error: ambiguous overload for 'operator=' (operand types are 'HasPtr' and 'std::remove_reference<HasPtr&>::type { aka HasPtr }')
 hp1 = std::move(*pH);
 ^
 ```
@@ -390,6 +371,9 @@ Foo Foo::sorted() const & {
 ```
 
 recursion and stack overflow.
+
+@miaojiuchen:
+Because the local variable `ret` here is an Lvalue, so when we call `ret.sorted()`, we are actually not calling the member function `Foo Foo::sorted() &&` as expected, but `Foo Foo::sorted() const &` instead. As a result, the code will be trapped into a recursion and causes a deadly stack overflow.
 
 ## Exercise 13.57:
 >What if we defined sorted as:

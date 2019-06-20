@@ -3,7 +3,6 @@
 //  Exercise 12.27
 //
 //  Created by pezy on 12/31/14.
-//  Copyright (c) 2014 pezy. All rights reserved.
 //
 //  The TextQuery and QueryResult classes use only capabilities that we have already covered.
 //  Without looking ahead, write your own versions of these classes.
@@ -14,7 +13,7 @@
 
 TextQuery::TextQuery(std::ifstream &ifs) : input(new vector<string>)
 {
-    LineNo lineNo{0};
+    LineNo lineNo{ 0 };
     for (string line; std::getline(ifs, line); ++lineNo) {
         input->push_back(line);
         std::istringstream line_stream(line);
@@ -32,9 +31,9 @@ TextQuery::TextQuery(std::ifstream &ifs) : input(new vector<string>)
 QueryResult TextQuery::query(const string& str) const
 {
     // use static just allocate once.
-    static shared_ptr<std::set<LineNo>> nodate(new std::set<LineNo>);
+    static shared_ptr<std::set<LineNo>> nodata(new std::set<LineNo>);
     auto found = result.find(str);
-    if (found == result.end()) return QueryResult(str, nodate, input);
+    if (found == result.end()) return QueryResult(str, nodata, input);
     else return QueryResult(str, found->second, input);
 }
 

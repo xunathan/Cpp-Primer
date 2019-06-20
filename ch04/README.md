@@ -1,9 +1,9 @@
-##Exercise 4.1
+## Exercise 4.1
 >What is the value returned by 5 + 10 * 20/2?
 
 105
 
-##Exercise 4.2
+## Exercise 4.2
 >Using Table 4.12 (p. 166), parenthesize the following expressions to
 indicate the order in which the operands are grouped:
 ```cpp
@@ -11,21 +11,16 @@ indicate the order in which the operands are grouped:
 * vec.begin() + 1 //=> (*(vec.begin())) + 1
 ```
 
-##Exercise 4.3
+## Exercise 4.3
 >Order of evaluation for most of the binary operators is left
 undefined to give the compiler opportunities for optimization.
 This strategy presents a trade-off between efficient code generation
 and potential pitfalls in the use of the language by the programmer.
 Do you consider that an acceptable trade-off? Why or why not?
 
-Yes, I think it necessary to hold the trade-off.
-Because the speed is always the biggest advantage of C++. Sometimes, we need
-the compiler's features for efficient work. But if you are not a expert. I
-have to advice you do not touch the undefined behaviors.
+No. IMHO, such design cannot improve performance siginificantly, but it can make bugs very tricky to handle.
 
-For an instance, `cout << i << ++i <<endl` should never appear in your code.
-
-##Exercise 4.4
+## Exercise 4.4
 >Parenthesize the following expression to show how it is evaluated.
 Test your answer by compiling the expression (without parentheses)
 and printing its result.
@@ -37,7 +32,7 @@ and printing its result.
 // print: 91
 ```
 
-##Exercise 4.5
+## Exercise 4.5
 >Determine the result of the following expressions.
 ```cpp
 -30 * 3 + 21 / 5  // -90+4 = -86
@@ -46,15 +41,18 @@ and printing its result.
 -30 / 3 * 21 % 4  // -10*21%4 = -210%4 = -2
 ```
 
-##Exercise 4.6
+## Exercise 4.6
 >Write an expression to determine whether an int value is even or odd.
 
 ```cpp
-i%2 == 0 ? "even" : "odd"
+ i & 0x1 
 ```
 
-##Exercise 4.7
+## Exercise 4.7
 >What does overflow mean? Show three expressions that will overflow.
+
+from the book:
+>Some arithmetic expressions yield undefined results. Some of these undefined espressions are due to the nature of mathematics-for example, division by zero. Others are undefined due to the nature of computers-for example, due to overflow. Overflow happens when a value is computed that is outside the range of values that the type can represent.
 
 ```cpp
 short svalue = 32767; ++svalue; // -32768
@@ -62,15 +60,17 @@ unsigned uivalue = 0; --uivalue;  // 4294967295
 unsigned short usvalue = 65535; ++usvalue;  // 0
 ```
 
-##Exercise 4.8
->Explain when operands are evaluated in the logical AND,
-logical OR, and equality operators.
+## Exercise 4.8
+>Explain when operands are evaluated in the logical `AND`, logical `OR`, and equality operators.
 
-logical `AND` : `true` only if both its operands evaluated to `true`;
-logical `OR`  : `true` if either of its operands evaluated to `true`;
-equality operators : `true` only if its operands are equal.
+from the book:
+> The logical `AND` and `OR` operators always evaluate their left operand before the right. Moreover, the right operand is evaluated if and only if the left operand does not determine the result. This strategy is known as **short-circuit evaluation**.
 
-##Exercise 4.9
+- logical `AND` : the second operand is evaluated if and only if the left side is `true`.
+- logical `OR`  : the second operand is evaluated if and only if the left side is `false`
+- equality operators `==` : undefined.
+
+## Exercise 4.9
 >Explain the behavior of the condition in the following if:
 ```cpp
 const char *cp = "Hello World";
@@ -81,9 +81,9 @@ cp is a pointer to `const char *`, and it's not a nullptr. true.
 
 `*cp` is a const char: 'H', and it is explicit a nonzero value. true.
 
-true && true = true.
+true && true -> true.
 
-##Exercise 4.10
+## Exercise 4.10
 >Write the condition for a while loop that would read ints from
 the standard input and stop when the value read is equal to 42.
 
@@ -92,7 +92,7 @@ int i = 0;
 while(cin >> i && i != 42)
 ```
 
-##Exercise 4.11
+## Exercise 4.11
 >Write an expression that tests four values, a, b, c, and d,
 and ensures that a is greater than b, which is greater than c,
 which is greater than d.
@@ -101,26 +101,13 @@ which is greater than d.
 a>b && b>c && c>d
 ```
 
-##Exercise 4.12
+## Exercise 4.12
 >Assuming `i`, `j`, and `k` are all ints, explain what `i != j < k` means.
 
-According to Operator precedence, `i != j < k` is same as `i != (j < k)`.
+`i != j < k` is equivalent to `i != (j < k)`.
 
-The condition group `j` and `k` to the `<` operator. The `bool` result of that expression is the right hand operand of the `!=` operator.
-That is `i`(int) is compared to the `true/false` result of the first comparison! To accomplish the test we intended, we can rewrite the expression as follows:
 
-```cpp
-i != j && j < k
-```
-
------
-
-**reference**
-
-> It is usually a bad idea to use the boolean literals `true` and `false` as operands in a comparison.
-These literals should be used only to compare to an object of type `bool`.
-
-##Exercise 4.13
+## Exercise 4.13
 >What are the values of i and d after each assignment?
 ```cpp
 int i;   double d;
@@ -128,14 +115,14 @@ d = i = 3.5; // i = 3, d = 3.0
 i = d = 3.5; // d = 3.5, i = 3
 ```
 
-##Exercise 4.14
+## Exercise 4.14
 >Explain what happens in each of the if tests:
 ```cpp
 if (42 = i)   // complie error: expression is not assignable
 if (i = 42)   // true.
 ```
 
-##Exercise 4.15
+## Exercise 4.15
 >The following assignment is illegal. Why? How would you correct it?
 ```cpp
 double dval; int ival; int *pi;
@@ -147,7 +134,7 @@ dval = ival = 0;
 pi = 0;
 ```
 
-##Exercise 4.16
+## Exercise 4.16
 >Although the following are legal,
 they probably do not behave as the programmer expects. Why?
 Rewrite the expressions as you think they should be.
@@ -160,26 +147,22 @@ if ((p=getPtr()) != 0)
 if (i == 1024)
 ```
 
-##Exercise 4.17
+## Exercise 4.17
 >Explain the difference between prefix and postfix increment.
 
-The postfix operators increment(or decrement) the operand but yield a copy
-of the original, unchanged value as its result.
+See: [What is the difference between ++i and i++](http://stackoverflow.com/questions/24853/what-is-the-difference-between-i-and-i)
 
-The prefix operators return the object itself as an **lvalue**.
-
-The postfix operators return a copy of the object's original value as an **rvalue**.
-
-##Exercise 4.18
+## Exercise 4.18
 >What would happen if the while loop on page 148 that prints
 the elements from a vector used the prefix increment operator?
 
-It will print from the second element and will dereference the v.end() at last.(It's undefined and very dangerous)
+It will print from the second element and dereference `v.end()` at last, which is a **UB**.
 
-##Exercise 4.19
+## Exercise 4.19
 >Given that ptr points to an int, that vec is a vector<int>,
 and that ival is an int, explain the behavior of each of these expressions.
 Which, if any, are likely to be incorrect? Why? How might each be corrected?
+
 ```cpp
 ptr != 0 && *ptr++  // check ptr is not a nullptr, and then check the pointer value.
 ival++ && ival // check ival, and then check ival+1 whether equal zero.
@@ -187,10 +170,10 @@ vec[ival++] <= vec[ival] // incorrect. It is an **undefined behavior.**
 // correct:
 vec[ival] <= vec[ival+1]
 ```
->Every value computation and side effect of the first (left) argument of the built-in logical AND operator && and the built-in logical OR operator || is sequenced before every value computation and side effect of the second (right) argument. 
-see [order of evaluation](http://en.cppreference.com/w/cpp/language/eval_order).
 
-##Exercise 4.20
+See [order of evaluation](http://en.cppreference.com/w/cpp/language/eval_order).
+
+## Exercise 4.20
 >Assuming that iter is a vector<string>::iterator,
 indicate which, if any, of the following expressions are legal.
 Explain the behavior of the legal expressions and
@@ -204,9 +187,9 @@ iter->empty();  // indicate the iter' value whether empty.
 iter++->empty();  // return iter->empty(), then ++iter.
 ```
 
-##[Exercise 4.21](ex4_21.cpp)
-##[Exercise 4.22](ex4_22.cpp)
-##Exercise 4.23
+## [Exercise 4.21](ex4_21.cpp)
+## [Exercise 4.22](ex4_22.cpp)
+## Exercise 4.23
 >The following expression fails to compile due to operator precedence.
 Using Table 4.12 (p. 166), explain why it fails. How would you fix it?
 ```cpp
@@ -220,7 +203,7 @@ Fix it:
 string pl = s + (s[s.size() - 1] == 's' ? "" : "s") ;
 ```
 
-##Exercise 4.24
+## Exercise 4.24
 >Our program that distinguished between high pass, pass,
 and fail depended on the fact that
 the conditional operator is right associative.
@@ -238,38 +221,29 @@ finalgrade = ((grade > 90) ? "high pass" : (grade < 60)) ? "fail" : "pass";
 if `grade > 90`, first conditional operator's result is `high pass`. so the finalgrade is always fail.
 It's contradictory obviously.
 
-##Exercise 4.25
+## Exercise 4.25
 >What is the value of ~'q' << 6 on a machine with 32-bit ints and 8 bit chars, that uses Latin-1 character set in which 'q' has the bit pattern 01110001?
 
-The final value in decimal representation is `-7296`.  
-<<<<<<< HEAD
+The final value in decimal is `-7296`.  
 
-The bitwise NOT operator (`~`) yields us the Ones' Complement of `0000 0000 0000 0000 0000 0000 0111 0001`, which is `1111 1111 1111 1111 1111 1111 1000 1110`. The value of `1111 1111 1111 1111 1111 1111 1000 1110` in decimal form is `-114`. This may come as a surprise to some as the unsigned value of said binary sequence is `4294967182`. The most significant bit (the left-most bit, commonly referred to as the sign bit) is however "turned on", or `1`, which siginifies a negatation operation on that particular bit. The value of that particular bit is then `-2147483648`.
-
-=======
-
-The bitwise NOT operator (`~`) yields us the Ones' Complement of `0000 0000 0000 0000 0000 0000 0111 0001`, which is `1111 1111 1111 1111 1111 1111 1000 1110`. The value of `1111 1111 1111 1111 1111 1111 1000 1110` in decimal form is `-114`. This may come as a surprise to some as the unsigned value of said binary sequence is `4294967182`. The most significant bit (the left-most bit, commonly referred to as the sign bit) is however "turned on", or `1`, which signifies a negation operation on that particular bit. The value of that particular bit is then `-2147483648`.
-
->>>>>>> master
-We then shift the bits `6` digits to the left, which yields us `1111 1111 1111 1111 1110 0011 1000 0000`. Overflowing bits were discarded. The decimal representation of the binary sequence is `-7296`.
-
-##Exercise 4.26
+## Exercise 4.26
 >In our grading example in this section, what would happen if we used unsigned int as the type for quiz1?
 
-no different in most situation. `unsigned int` have the same size as `unsigned long` on most machine. But the second one could make sure that it have **at least 32 bits** on any machine.
+The C++ standard does not specify the size of integral types in bytes, but it specifies minimum ranges they must be able to hold. The minimum range of `unsigned int` is 0 to 65535. Since some implementations use only the minimum 16 bits for `unsigned int`, this could cause undefined behavior.
 
-##Exercise 4.27
+
+## Exercise 4.27
 >What is the result of each of these expressions?
 ```cpp
 unsigned long ul1 = 3, ul2 = 7;
 ul1 & ul2 // == 3
 ul1 | ul2 // == 7
 ul1 && ul2 // == true
-ul1 || ul2 // == ture
+ul1 || ul2 // == true
 ```
 
-##[Exercise 4.28](ex4_28.cpp)
-##Exercise 4.29
+## [Exercise 4.28](ex4_28.cpp)
+## Exercise 4.29
 >Predict the output of the following code and explain your reasoning. Now run the program. Is the output what you expected? If not, figure out why.
 ```cpp
 int x[10];   int *p = x;
@@ -277,12 +251,13 @@ cout << sizeof(x)/sizeof(*x) << endl;
 cout << sizeof(p)/sizeof(*p) << endl;
 ```
 
-The first result is 10. It returns the number of elements in x. But the second result depends on your machine. It would be 2 on the 64-bit machine and 1 on the 32-bit machine. Because of the size of pointer is different on various machines.
+ * The first is 10. It returns the number of elements in x. 
+ * The second result is undefined.
 
 -----
 reference: [Why the size of a pointer is 4bytes in C++](http://stackoverflow.com/a/2428809)
 
-##Exercise 4.30
+## Exercise 4.30
 >Using Table 4.12 (p. 166), parenthesize the following expressions to match the default evaluation:
 ```cpp
 sizeof x + y      // (sizeof x)+y . "sizeof" has higher precedence than binary `+`.
@@ -294,7 +269,7 @@ sizeof f()        //If `f()` returns `void`, this statement is undefined, otherw
 -----
 reference: [sizeof operator](http://en.cppreference.com/w/cpp/language/sizeof)
 
-##Exercise 4.31
+## Exercise 4.31
 >The program in this section used the prefix increment and decrement operators. Explain why we used prefix and not postfix. What changes would have to be made to use the postfix versions? Rewrite the program using postfix operators.
 
 ~~postfix will copy itself as return, then increment or decrement. prefix will increment or decrement first, and return itself. so prefix is more effective in this program.(reduce one copy space.)~~
@@ -318,11 +293,11 @@ This is not an appropriate example to discuss the difference of prefix and postf
 -----
 reference: [Usage of the Built-in Comma Operator](http://stackoverflow.com/questions/22591387/usage-of-the-built-in-comma-operator)
 
-##Exercise 4.32
+## Exercise 4.32
 >Explain the following loop.
 ```cpp
 constexpr int size = 5;
-int ia[size] = {1,2,3,4,5};
+int ia[size] = { 1, 2, 3, 4, 5 };
 for (int *ptr = ia, ix = 0;
     ix != size && ptr != ia+size;
     ++ix, ++ptr) { /* ... */ }
@@ -330,7 +305,7 @@ for (int *ptr = ia, ix = 0;
 
 `ptr` and `ix` have the same function. The former use a pointer, and the latter use the index of array. we use the loop to through the array.(just choose one from `ptr` and `ix`)
 
-##Exercise 4.33
+## Exercise 4.33
 >Using Table 4.12 (p. 166) explain what the following expression does:
 ```cpp
 someValue ? ++x, ++y : --x, --y
@@ -342,11 +317,11 @@ Because of the most lowest precedence of the comma operator, the expression is s
 ```
 If someValue is true, then `++x`, and the result is `y`, if someValue is false, then `--x`, and the result is `--y`. so it is also same as:
 ```cpp
-someValue ? (++x,y) : (--x,--y);
+someValue ? (++x, y) : (--x, --y);
 ```
 Even though the result has nothing to do with `x`, the evaluation of `someValue` does effect the operation on `x`.
 
-##Exercise 4.34
+## Exercise 4.34
 >Given the variable definitions in this section, explain what conversions take place in the following expressions:
 (a) if (fval)
 (b) dval = fval + ival;
@@ -359,7 +334,7 @@ dval = fval + ival; // ival converted to fval, then the result of fval add ival 
 dval + ival * cval; // cval converted to int, then that int and ival converted to double.
 ```
 
-##Exercise 4.35
+## Exercise 4.35
 >Given the following definitions,
 ```cpp
 char cval; int ival; unsigned int ui; float fval; double dval;
@@ -372,24 +347,24 @@ dval = ui * fval; // ui promoted to float. then that float converted to double.
 cval = ival + fval + dval;  // ival converted to float, then that float and fval converted to double. At last, that double converted to char(by truncation).
 ```
 
-##Exercise 4.36
+## Exercise 4.36
 >Assuming i is an int and d is a double write the expression i *= d so that it does integral, rather than floating-point, multiplication.
 
 ```cpp
 i *= static_cast<int>(d);
 ```
 
-##Exercise 4.37
+## Exercise 4.37
 >Rewrite each of the following old-style casts to use a named cast:
 ```cpp
 int i; double d; const string *ps; char *pc; void *pv;
 pv = (void*)ps; // pv = const_cast<string*>(ps); or pv = static_cast<void*>(const_cast<string*>(ps));
 i = int(*pc);   // i = static_cast<int>(*pc);
 pv = &d;        // pv = static_cast<void*>(&d);
-pc = (char*)pv; // pc = reinterpret_cast<char*>(pv);
+pc = (char*)pv; // pc = static_cast<char*>(pv);
 ```
 
-##Exercise 4.38
+## Exercise 4.38
 >Explain the following expression:
 ```cpp
 double slope = static_cast<double>(j/i);

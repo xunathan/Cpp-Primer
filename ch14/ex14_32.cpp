@@ -3,20 +3,20 @@
 #include <iostream>
 
 StrBlobPtr&
-StrBlobPtr_pointer::operator *()
+StrBlobPtr_pointer::operator *() const
 {
-    return *(this->pointer);
+    return *pointer;
 }
 
 StrBlobPtr*
-StrBlobPtr_pointer::operator ->()
+StrBlobPtr_pointer::operator ->() const
 {
-    return & this->operator *();
+    return pointer;
 }
 
 int main()
 {
-    StrBlob sb{"hello", "world"};
+    StrBlob sb{ "hello", "world" };
     StrBlobPtr iter = sb.begin();
     StrBlobPtr_pointer p(&iter);
     std::cout << p->deref() << std::endl;

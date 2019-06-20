@@ -3,7 +3,6 @@
 //  Exercise 11.32
 //
 //  Created by pezy on 12/17/14.
-//  Copyright (c) 2014 pezy. All rights reserved.
 //
 //  Using the multimap from the previous exercise, write a program to print the list of **authors and their works** alphabetically.
 
@@ -17,12 +16,12 @@ using std::string;
 int main()
 {
     std::multimap<string, string> authors{
-        {"alan", "DMA"},
-        {"pezy", "LeetCode"},
-        {"alan", "CLRS"},
-        {"wang", "FTP"},
-        {"pezy", "CP5"},
-        {"wang", "CPP-Concurrency"}
+        { "alan", "DMA" },
+        { "pezy", "LeetCode" },
+        { "alan", "CLRS" },
+        { "wang", "FTP" },
+        { "pezy", "CP5" },
+        { "wang", "CPP-Concurrency" }
     };
     std::map<string, std::multiset<string>> order_authors;
     for (const auto &author : authors)

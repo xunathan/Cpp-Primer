@@ -3,7 +3,6 @@
 //  Exercise 11.12 11.13
 //
 //  Created by pezy on 12/15/14.
-//  Copyright (c) 2014 pezy. All rights reserved.
 //
 //  Write a program to read a sequence of strings and ints,
 //  storing each into a pair. Store the pairs in a vector.
@@ -25,8 +24,8 @@ int main()
     while (std::cin >> str >> i)
         vec.push_back(std::pair<std::string, int>(str, i));
         //vec.push_back(std::make_pair(str, i));
-        //vec.push_back({str, i});
-        //vec.emplace_back(str, i); //!!! easiest way.
+        //vec.push_back({ str, i });
+        //vec.emplace_back(str, i); //!! easiest way.
     
     for (const auto &p : vec)
         std::cout << p.first << ":" << p.second << std::endl;

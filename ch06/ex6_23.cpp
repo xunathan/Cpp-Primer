@@ -1,5 +1,4 @@
-#include<iostream>
-
+#include <iostream>
 using std::cout; using std::endl; using std::begin; using std::end;
 
 void print(const int *pi)
@@ -11,8 +10,7 @@ void print(const int *pi)
 void print(const char *p)
 {
     if (p)
-        while (*p)
-            cout << *p++;
+        while (*p) cout << *p++;
     cout << endl;
 }
 
@@ -37,7 +35,7 @@ void print(int (&arr)[2])
 
 int main()
 {
-    int i = 0, j[2] = {0, 1};
+    int i = 0, j[2] = { 0, 1 };
     char ch[5] = "pezy";
     
     print(ch);

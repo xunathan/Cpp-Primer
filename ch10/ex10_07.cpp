@@ -3,7 +3,6 @@
 //  Exercise 10.7
 //
 //  Created by pezy on 12/9/14.
-//  Copyright (c) 2014 pezy. All rights reserved.
 //
 //  @Brief  Determine if there are any errors in the following programs and, if so, correct the error(s)
 
@@ -30,11 +29,10 @@ int main()
     int i;
     while (cin >> i)
         lst.push_back(i);
-    vec.resize(lst.size());
-    // ^ Fixed: added this statement
-    // Cause Algorithms that write to a destination iterator assume
-    // the destination is large enough to hold the number of elements being written.
-    copy(lst.cbegin(), lst.cend(), vec.begin());
+
+    copy(lst.cbegin(), lst.cend(), back_inserter(vec));
+    // Fixed: the vec.begin() was replaced by a back_inserter iterator, capable of
+    // insert new elements automatically at the end of the container.
     
     // (b)
     vector<int> v;

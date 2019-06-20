@@ -3,7 +3,6 @@
 //  Exercise 10.33
 //
 //  Created by pezy on 12/13/14.
-//  Copyright (c) 2014 pezy. All rights reserved.
 //
 //  Write a program that takes the names of an input file and two output files.
 //  The input file should hold integers. Using an istream_iterator read the input file.
@@ -28,7 +27,7 @@ int main(int argc, char **argv)
     std::ostream_iterator<int> out_odd(ofs_odd, " "), out_even(ofs_even, "\n");
 
     std::for_each(in, in_eof, [&out_odd, &out_even](const int i){
-        *(i&0x1 ? out_odd : out_even)++ = i;
+        *(i & 0x1 ? out_odd : out_even)++ = i;
     });
 
     return 0;

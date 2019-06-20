@@ -1,18 +1,17 @@
 #include <iostream>
 #include "include/Sales_item.h"
 
+using std::cin;
+using std::cout;
+using std::endl;
+using std::cerr;
+
 int main()
 {
-  Sales_item item1, item2;
-  std::cin >> item1 >> item2;
-  if (item1.isbn() == item2.isbn())
-  {
-  	std::cout << item1 + item2 << std::endl;
-  	return 0;
-  }
-  else
-  {
-  	std::cerr << "Data must refer to same ISBN." << std::endl;
-  	return -1;
-  }
+    Sales_item item1, item2;
+    cin >> item1 >> item2;
+    if (item1.isbn() == item2.isbn())
+        cout << item1 + item2 << endl;
+    else
+        cerr << "Different ISBN." << endl;
 }

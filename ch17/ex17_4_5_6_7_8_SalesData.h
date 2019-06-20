@@ -1,9 +1,7 @@
 /*
  * This file contains code from "C++ Primer, Fifth Edition", by Stanley B.
  * Lippman, Josee Lajoie, and Barbara E. Moo, and is covered under the
- * copyright and warranty notices given in that book:
  * 
- * "Copyright (c) 2013 by Objectwrite, Inc., Josee Lajoie, and Barbara E. Moo."
  * 
  * 
  * "The authors and publisher have taken care in the preparation of this book,
@@ -27,11 +25,11 @@
  * 	Fax: (201) 236-3290
 */ 
 
-//!
-//! Exercise 14.45:
-//! Write conversion operators to convert a Sales_data to string and to double.
-//! What values do you think these operators should return?
-//!
+//
+// Exercise 14.45:
+// Write conversion operators to convert a Sales_data to string and to double.
+// What values do you think these operators should return?
+//
 #ifndef SALES_DATA_H
 #define SALES_DATA_H
 
@@ -41,7 +39,7 @@
 
 class Sales_data
 {
-    //! friends
+    // friends
     friend Sales_data operator+(const Sales_data& lhs, const Sales_data& rhs);
 
     friend std::ostream&
@@ -62,26 +60,26 @@ public:
 	           bookNo(s), units_sold(n), revenue(p*n) { }
     Sales_data(const Sales_data &s ):
         bookNo(s.bookNo), units_sold(s.units_sold), revenue(s.revenue)
-    {}
+    { }
 
     Sales_data(Sales_data&& s):
         bookNo(s.bookNo), units_sold(s.units_sold), revenue(s.revenue)
-    {}
+    { }
 
-    ~Sales_data(){}
+    ~Sales_data(){ }
 	Sales_data(std::istream &);
 
 	std::string isbn() const { return bookNo; }
 	Sales_data& combine(const Sales_data&);
 
-    //! assignments
+    // assignments
     Sales_data& operator  =(const Sales_data& rhs);
     Sales_data& operator  =(const std::string&  rhs);
     Sales_data& operator +=(const Sales_data& rhs);
 
-    //! conversion
+    // conversion
     explicit operator std::string () const { return bookNo; }
-    explicit operator double      () const { return revenue;}
+    explicit operator double      () const { return revenue; }
 
 	double avg_price() const;
 private:
@@ -91,7 +89,7 @@ private:
 };
 
 
-//! overloaded operators added 10.Jan.2014 for ex14.2
+// overloaded operators added 10.Jan.2014 for ex14.2
 inline Sales_data
 operator+(const Sales_data& lhs, const Sales_data& rhs)
 {

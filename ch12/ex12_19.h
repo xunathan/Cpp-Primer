@@ -3,7 +3,6 @@
 //  Exercise 12.19
 //
 //  Created by pezy on 12/26/14.
-//  Copyright (c) 2014 pezy. All rights reserved.
 //
 //  Define your own version of StrBlobPtr and
 //  update your StrBlob class with the appropriate friend declaration and begin and end members.
@@ -17,8 +16,7 @@
 #include <string>
 #include <initializer_list>
 #include <memory>
-#include <exception>
-
+#include <stdexcept>
 using std::vector; using std::string;
 
 class StrBlobPtr;
@@ -75,7 +73,7 @@ class StrBlobPtr {
 public:
     StrBlobPtr():curr(0) { }
     StrBlobPtr(StrBlob &a, size_t sz = 0):wptr(a.data), curr(sz) { }
-    bool operator!=(const StrBlobPtr& p) {return p.curr != curr; }
+    bool operator!=(const StrBlobPtr& p) { return p.curr != curr; }
     string& deref() const {
         auto p = check(curr, "dereference past end");
         return (*p)[curr];

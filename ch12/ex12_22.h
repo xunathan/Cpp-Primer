@@ -3,7 +3,6 @@
 //  Exercise 12.22
 //
 //  Created by pezy on 12/28/14.
-//  Copyright (c) 2014 pezy. All rights reserved.
 //
 //  What changes would need to be made to StrBlobPtr to create a class
 //  that can be used with a const StrBlob?
@@ -76,7 +75,7 @@ class ConstStrBlobPtr {
 public:
     ConstStrBlobPtr():curr(0) { }
     ConstStrBlobPtr(const StrBlob &a, size_t sz = 0):wptr(a.data), curr(sz) { } // should add const
-    bool operator!=(ConstStrBlobPtr& p) {return p.curr != curr; }
+    bool operator!=(ConstStrBlobPtr& p) { return p.curr != curr; }
     const string& deref() const { // return value should add const
         auto p = check(curr, "dereference past end");
         return (*p)[curr];

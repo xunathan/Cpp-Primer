@@ -5,15 +5,15 @@
 ```cpp
 StrBlob b1;
 {
-    StrBlob b2 = {"a", "an", "the"};
+    StrBlob b2 = { "a", "an", "the" };
     b1 = b2;
     b2.push_back("about");
 }
 ```
 
-b2 is destroyed, but the elements in b2 must not be destroyed.
-
-so b1 and b2 both have 4 elements.
+At the end of this code,
+ * `b1` holds 4 elements;
+ * `b2` has been destroyed automatically. So it's meaningless to say how many elements in `b2`.
 
 ## Exercise 12.2
 
@@ -74,7 +74,7 @@ bool b() {
 }
 ```
 
-The p will convert to a bool ,which means that the dynamic memory allocated has no chance to be freed. As a result, memory leakage will occur.
+The p will convert to a bool , which means that the dynamic memory allocated has no chance to be freed. As a result, memory leakage will occur.
 
 ## Exercise 12.9:
 >Explain what happens in the following code:
@@ -91,7 +91,7 @@ Memory leakage happens. Because after `r = q` was executed, no pointer points to
 
 - to `q2` and `r2`:
 
-It's safe. Because after 'r2 = q2', the reference count belongs to r2 reduce to 0 and the reference count belongs to q2 increase to 2,then the memory allocated by r2 will be released automatically.
+It's safe. Because after 'r2 = q2', the reference count belongs to r2 reduce to 0 and the reference count belongs to q2 increase to 2, then the memory allocated by r2 will be released automatically.
 
 ## [Exercise 12.10](ex12_10.cpp)
 ## [Exercise 12.11](ex12_11.cpp)
@@ -111,7 +111,7 @@ std::string& deref() const
 ```
 Which version do you think is better and why?
 
-the origin version is better. cause it's more **readability** and **easier to debug**.
+The original one is better, because it's more readable.
 
 ## Exercise 12.22 [Header](ex12_22.h)|[Implementation](ex12_22.cpp)
 ## [Exercise 12.23](ex12_23.cpp)
@@ -144,14 +144,14 @@ do {
 } while ( true );
 ```
 
-I prefer the `do while`, cause the process according with our logic.
+I prefer `do while`, because it looks clearer.
 
 ## Exercise 12.30 [Header](ex12_27_30.h)|[Implementation](ex12_27_30.cpp)|[Test](ex12_27_30_TEST.cpp)
 
 ## Exercise 12.31:
 >What difference(s) would it make if we used a vector instead of a set to hold the line numbers? Which approach is better? Why?
 
-The `vector` can not ensure no duplicates. Hence, in terms of this programme `set` is a better option.
+`vector` doesn't guarantee that elements being held are unique, so `set` is a better choice for this case.
 
-## Exercise 12.32 [Header](ex12_32.h)|[Implementation](ex12_32.cpp)
-## Exercise 12.33 [Header](ex12_33.h)|[Implementation](ex12_33.cpp)
+## Exercise 12.32 [Header](ex12_32.h)|[Implementation](ex12_32.cpp)|[Test](ex12_32_TEST.cpp)
+## Exercise 12.33 [Header](ex12_33.h)|[Implementation](ex12_33.cpp)|[Test](ex12_33_TEST.cpp)
